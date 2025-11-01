@@ -16,6 +16,8 @@ a particular track with any detection, then the update ID gets a *loose* value.
 By convention, we use -9999 as the loose value.
 """
 
+from typing import Dict
+
 UPD_ID_LOOSE = -9999
 ANN_ID_ABSENT = -1000
 
@@ -53,17 +55,13 @@ class AssociationQuality(object):
         cc = self
         return f'AssociationQuality(TP {cc.num_tp} TN {cc.num_tn} FP {cc.num_fp} FN {cc.num_fn})'
 
-    def get_classification_ratios(self) -> BinaryClassificationRatios:
-        """Return an object convenient for computing the quality metrics (ratios).
+    def get_confusion_matrix(self) -> Dict[str, int]:
+        """Return the dictionary with confusion matrix (keys 'tp', 'fp', 'fn' and 'tp').
 
         Returns:
-            ClassificationRatios: the object dedicated to computing Accuracy, Precision, Recall
-            and F1-score ratios.
+            The dictionary representing the confusion matrix.
         """
-        bcr = BinaryClassificationRatios(
-            tp=self.num_tp, tn=self.num_tn, fp=self.num_fp, fn=self.num_fn
-        )
-        return bcr
+        return {'tp': self.num_tp, 'tn': self.num_tn, 'fp': self.num_fp, 'fn': self.num_fn}
 
     def classify(self, det_id: int, upd_id: int, is_supplied: bool) -> None:
         """Classify and accumulate the results of an association.
@@ -109,3 +107,4 @@ class AssociationQuality(object):
                 raise RuntimeError('Internal error 4')
         else:
             raise RuntimeError('Internal error 5')
+
