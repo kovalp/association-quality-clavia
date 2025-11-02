@@ -5,7 +5,6 @@ import pytest
 from association_quality_clavia import UPD_ID_LOOSE, AssociationQuality
 
 
-
 @pytest.fixture
 def aq() -> AssociationQuality:
     """."""
@@ -74,7 +73,15 @@ def test_classify_exception3(aq: AssociationQuality) -> None:
         aq.classify(2, -567, False)
 
 
-def test_get_classification_ratios(aq: AssociationQuality) -> None:
+def test_get_confusion_matrix(aq: AssociationQuality) -> None:
     """."""
-    ratios = aq.get_classification_ratios()
-    assert isinstance(ratios, BinaryClassificationRatios)
+    aq.num_tp = 10
+    aq.num_fp = 9
+    aq.num_fn = 8
+    aq.num_tn = 7
+    cm = aq.get_confusion_matrix()
+    assert len(cm) == 4
+    assert cm['tp'] == 10
+    assert cm['fp'] == 9
+    assert cm['fn'] == 8
+    assert cm['tn'] == 7

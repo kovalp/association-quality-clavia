@@ -18,9 +18,9 @@ By convention, we use -9999 as the loose value.
 
 from typing import Dict
 
+
 UPD_ID_LOOSE = -9999
 ANN_ID_ABSENT = -1000
-
 
 
 class AssociationQuality(object):
@@ -107,4 +107,3 @@ class AssociationQuality(object):
                 raise RuntimeError('Internal error 4')
         else:
             raise RuntimeError('Internal error 5')
-
