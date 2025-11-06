@@ -63,19 +63,19 @@ class AssociationQuality(object):
         """
         return {'tp': self.num_tp, 'tn': self.num_tn, 'fp': self.num_fp, 'fn': self.num_fn}
 
-    def classify(self, det_id: int, upd_id: int, is_supplied: bool) -> None:
+    def classify(self, ann_id: int, upd_id: int, is_supplied: bool) -> None:
         """Classify and accumulate the results of an association.
 
         Args:
-            det_id: The annotation ID from the instrumented target.
+            ann_id: The annotation ID from the instrumented target.
             upd_id: The update ID from the instrumented target.
             is_supplied: Indicates if the detection with `det_id` was supplied to tracker.
 
         Raises:
             RuntimeError: an internal error occurs due to invalid ID combinations.
         """
-        if det_id >= 0 and is_supplied:
-            if det_id == upd_id:
+        if ann_id >= 0 and is_supplied:
+            if ann_id == upd_id:
                 self.num_tp += 1
             elif upd_id >= 0:
                 self.num_fn += 1
@@ -84,10 +84,10 @@ class AssociationQuality(object):
             elif upd_id == UPD_ID_LOOSE:
                 self.num_fn += 1
             else:
-                raise RuntimeError('Internal error 1')
-        elif det_id >= 0 and not is_supplied:
-            if det_id == upd_id:
-                raise RuntimeError('Internal error 2')
+                raise RuntimeError('Internal 1', ann_id, upd_id, is_supplied)
+        elif ann_id >= 0 and not is_supplied:
+            if ann_id == upd_id:
+                raise RuntimeError('Internal 2', ann_id, upd_id, is_supplied)
             elif upd_id >= 0:
                 self.num_fp += 1
             elif upd_id == -1:
@@ -95,15 +95,15 @@ class AssociationQuality(object):
             elif upd_id == UPD_ID_LOOSE:
                 self.num_tn += 1
             else:
-                raise RuntimeError('Internal error 3')
-        elif det_id == -1:
-            if det_id == upd_id:
+                raise RuntimeError('Internal 3', ann_id, upd_id, is_supplied)
+        elif ann_id == -1:
+            if ann_id == upd_id:
                 self.num_tn += 1
             elif upd_id >= 0:
                 self.num_fp += 1
             elif upd_id == UPD_ID_LOOSE:
                 self.num_tn += 1
             else:
-                raise RuntimeError('Internal error 4')
+                raise RuntimeError('Internal 4', ann_id, upd_id, is_supplied)
         else:
-            raise RuntimeError('Internal error 5')
+            raise RuntimeError('Internal 5', ann_id, upd_id, is_supplied)

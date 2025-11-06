@@ -1,6 +1,6 @@
 [project]
 name = "association-quality-clavia"
-version = "0.1.0"
+version = "0.2.0"
 description = "Enable binary classification of the association in multiple-object tracking."
 readme = "README.md"
 authors = [
