@@ -26,3 +26,4 @@ def chdir_tmp(tmp_path) -> Path:
 def aq() -> AssociationQuality:
     """."""
     return AssociationQuality()
+
