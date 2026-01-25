@@ -1,3 +1,8 @@
+# 0.3.0
+
+  - Return BinClass object from `AssociationQuality.classify`
+  - Update (development) dependencies.  
+
 # 0.2.0
 
   - Better messages from the exceptions.
