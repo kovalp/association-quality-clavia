@@ -17,10 +17,18 @@ By convention, we use -9999 as the loose value.
 """
 
 from typing import Dict
+from enum import Enum
 
 
 UPD_ID_LOOSE = -9999
 ANN_ID_ABSENT = -1000
+
+
+class BinClass(Enum):
+    TN = 0
+    FN = 1
+    FP = 2
+    TP = 3
 
 
 class AssociationQuality(object):
