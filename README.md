@@ -18,9 +18,10 @@ The instrumentation consists in adding an *annotation* and *update IDs* to the t
 The update ID is updated after each association procedure.
 
 The classifier procedure (method `AssociationQuality.classify`) should be called after each
-tracking step. It is capable of telling apart true positives, false positives,
-false negatives and true negatives *if provided with* the annotation and update IDs
-and the list of annotation IDs given to the tracker the current step.
+tracking step. It is capable of telling apart true positives (TP), false positives (FP),
+false negatives (FN) and true negatives (TN) *if provided with* the annotation and update IDs
+and a *supply flag* calculated at the current step. The supply flag is easy to get
+as `ann_id in annotation_ids`.
 
 The method `AssociationQuality.classify` returns the object of type `BinClass`.
 The class `BinClass` enumerates `TN`, `FN`, `FP`, `TP`.

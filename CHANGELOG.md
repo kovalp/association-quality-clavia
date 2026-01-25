@@ -1,7 +1,7 @@
 # 0.3.0
 
   - Return BinClass object from `AssociationQuality.classify`
-  - Update (development) dependencies.  
+  - Lift the limitation on the installation of bump-my-version on Python 3.14.
 
 # 0.2.0
 
