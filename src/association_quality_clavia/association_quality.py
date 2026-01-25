@@ -16,11 +16,19 @@ a particular track with any detection, then the update ID gets a *loose* value.
 By convention, we use -9999 as the loose value.
 """
 
+from enum import Enum
 from typing import Dict
 
 
 UPD_ID_LOOSE = -9999
 ANN_ID_ABSENT = -1000
+
+
+class BinClass(Enum):
+    TN = 0
+    FN = 1
+    FP = 2
+    TP = 3
 
 
 class AssociationQuality(object):
@@ -63,7 +71,7 @@ class AssociationQuality(object):
         """
         return {'tp': self.num_tp, 'tn': self.num_tn, 'fp': self.num_fp, 'fn': self.num_fn}
 
-    def classify(self, ann_id: int, upd_id: int, is_supplied: bool) -> None:
+    def classify(self, ann_id: int, upd_id: int, is_supplied: bool) -> BinClass:
         """Classify and accumulate the results of an association.
 
         Args:
@@ -73,16 +81,23 @@ class AssociationQuality(object):
 
         Raises:
             RuntimeError: an internal error occurs due to invalid ID combinations.
+
+        Returns:
+            The BinClass enumerable.
         """
         if ann_id >= 0 and is_supplied:
             if ann_id == upd_id:
                 self.num_tp += 1
+                return BinClass.TP
             elif upd_id >= 0:
                 self.num_fn += 1
+                return BinClass.FN
             elif upd_id == -1:
                 self.num_fn += 1
+                return BinClass.FN
             elif upd_id == UPD_ID_LOOSE:
                 self.num_fn += 1
+                return BinClass.FN
             else:
                 raise RuntimeError('Internal 1', ann_id, upd_id, is_supplied)
         elif ann_id >= 0 and not is_supplied:
@@ -90,19 +105,25 @@ class AssociationQuality(object):
                 raise RuntimeError('Internal 2', ann_id, upd_id, is_supplied)
             elif upd_id >= 0:
                 self.num_fp += 1
+                return BinClass.FP
             elif upd_id == -1:
                 self.num_fp += 1
+                return BinClass.FP
             elif upd_id == UPD_ID_LOOSE:
                 self.num_tn += 1
+                return BinClass.TN
             else:
                 raise RuntimeError('Internal 3', ann_id, upd_id, is_supplied)
         elif ann_id == -1:
             if ann_id == upd_id:
                 self.num_tn += 1
+                return BinClass.TN
             elif upd_id >= 0:
                 self.num_fp += 1
+                return BinClass.FP
             elif upd_id == UPD_ID_LOOSE:
                 self.num_tn += 1
+                return BinClass.TN
             else:
                 raise RuntimeError('Internal 4', ann_id, upd_id, is_supplied)
         else:

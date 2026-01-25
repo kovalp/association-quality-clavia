@@ -1,35 +1,35 @@
 """."""
 
-from association_quality_clavia import UPD_ID_LOOSE, AssociationQuality
+from association_quality_clavia import UPD_ID_LOOSE, AssociationQuality, BinClass
 
 
 def test_classify_case1234(aq: AssociationQuality) -> None:
     """."""
-    aq.classify(0, 0, True)
-    assert repr(aq) == 'AssociationQuality(TP 1 TN 0 FP 0 FN 0)'
-    aq.classify(0, 1, True)
-    assert repr(aq) == 'AssociationQuality(TP 1 TN 0 FP 0 FN 1)'
-    aq.classify(0, -1, True)
-    assert repr(aq) == 'AssociationQuality(TP 1 TN 0 FP 0 FN 2)'
-    aq.classify(0, UPD_ID_LOOSE, True)
-    assert repr(aq) == 'AssociationQuality(TP 1 TN 0 FP 0 FN 3)'
+    assert aq.classify(0, 0, True) == BinClass.TP
+    assert aq.num_fn == 0 and aq.num_tp == 1 and aq.num_tn == 0 and aq.num_fp == 0
+    assert aq.classify(0, 1, True) == BinClass.FN
+    assert aq.num_fn == 1 and aq.num_tp == 1 and aq.num_tn == 0 and aq.num_fp == 0
+    assert aq.classify(0, -1, True) == BinClass.FN
+    assert aq.num_fn == 2 and aq.num_tp == 1 and aq.num_tn == 0 and aq.num_fp == 0
+    assert aq.classify(0, UPD_ID_LOOSE, True) == BinClass.FN
+    assert aq.num_fn == 3 and aq.num_tp == 1 and aq.num_tn == 0 and aq.num_fp == 0
 
 
 def test_classify_case5678(aq: AssociationQuality) -> None:
     """."""
-    aq.classify(1, 2, False)
-    assert repr(aq) == 'AssociationQuality(TP 0 TN 0 FP 1 FN 0)'
-    aq.classify(1, -1, False)
-    assert repr(aq) == 'AssociationQuality(TP 0 TN 0 FP 2 FN 0)'
-    aq.classify(1, UPD_ID_LOOSE, False)
-    assert repr(aq) == 'AssociationQuality(TP 0 TN 1 FP 2 FN 0)'
+    assert aq.classify(1, 2, False) == BinClass.FP
+    assert aq.num_fp == 1 and aq.num_tp == 0 and aq.num_tn == 0 and aq.num_fn == 0
+    assert aq.classify(1, -1, False) == BinClass.FP
+    assert aq.num_fp == 2 and aq.num_tp == 0 and aq.num_tn == 0 and aq.num_fn == 0
+    assert aq.classify(1, UPD_ID_LOOSE, False) == BinClass.TN
+    assert aq.num_fp == 2 and aq.num_tp == 0 and aq.num_tn == 1 and aq.num_fn == 0
 
 
 def test_classify_case9_10_11_12(aq: AssociationQuality) -> None:
     """."""
-    aq.classify(-1, 1, False)
-    assert repr(aq) == 'AssociationQuality(TP 0 TN 0 FP 1 FN 0)'
-    aq.classify(-1, -1, False)
-    assert repr(aq) == 'AssociationQuality(TP 0 TN 1 FP 1 FN 0)'
-    aq.classify(-1, UPD_ID_LOOSE, False)
-    assert repr(aq) == 'AssociationQuality(TP 0 TN 2 FP 1 FN 0)'
+    assert aq.classify(-1, 1, False) == BinClass.FP
+    assert aq.num_fp == 1 and aq.num_tp == 0 and aq.num_tn == 0 and aq.num_fn == 0
+    assert aq.classify(-1, -1, False) == BinClass.TN
+    assert aq.num_fp == 1 and aq.num_tp == 0 and aq.num_tn == 1 and aq.num_fn == 0
+    assert aq.classify(-1, UPD_ID_LOOSE, False) == BinClass.TN
+    assert aq.num_fp == 1 and aq.num_tp == 0 and aq.num_tn == 2 and aq.num_fn == 0
