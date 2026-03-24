@@ -26,8 +26,7 @@ as `ann_id in annotation_ids`.
 The method `AssociationQuality.classify` returns the object of type `BinClass`.
 The class `BinClass` enumerates `TN`, `FN`, `FP`, `TP`.
 
-The use of the module will be demonstrated in the packages (repos) `pure-ab-3d-mot` and
-`eval-ab-3d-mot`. The package `pure-ab-3d-mot` features a refactored AB3DMOT tracker
-instrumented according to the needs of the binary classification of the association.
+The use of the module will be demonstrated in the package
+[`eval-ab-3d-mot`](https://github.com/kovalp/eval-ab-3d-mot).
 The package `eval-ab-3d-mot` features the evaluation part extracted from the original
 AB3DMOT as well as the code to use the association classifier from this package.
