@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Choice Quiz</title>
+    <style>
+        /* Basic Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        #quiz-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+        h2 {
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+        .choice-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .choice-btn:hover {
+            background-color: #e9ecef;
+        }
+        .choice-btn:active {
+            transform: scale(0.98);
+        }
+        #result-container {
+            display: none; /* Hidden until quiz is finished */
+        }
+        .restart-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+        .restart-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <div id="question-container">
+        <h2 id="question-text">Question goes here</h2>
+        <div id="choices-container">
+            </div>
+    </div>
+
+    <div id="result-container">
+        <h2>Quiz Completed!</h2>
+        <p>Your score: <strong id="score-display">0</strong> / <strong id="total-display">0</strong></p>
+        <button class="choice-btn restart-btn" onclick="restartQuiz()">Restart Quiz</button>
+    </div>
+</div>
+
+<script>
+    // --- 1. Quiz Data ---
+    // You can add as many questions as you want here.
+    const quizData = [
+        {
+            question: "What does HTML stand for?",
+            choices: [
+                "Hyper Text Preprocessor",
+                "Hyper Text Markup Language",
+                "Hyper Text Multiple Language",
+                "Hyper Tool Multi Language"
+            ],
+            correctAnswer: 1 // Index of the correct choice (0-based, so 1 is the 2nd option)
+        },
+        {
+            question: "What year was JavaScript launched?",
+            choices: ["1996", "1995", "1994", "None of the above"],
+            correctAnswer: 1
+        },
+        {
+            question: "Which language runs natively in a web browser?",
+            choices: ["Java", "C++", "Python", "JavaScript"],
+            correctAnswer: 3
+        }
+    ];
+
+    // --- 2. State Variables ---
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    // --- 3. DOM Elements ---
+    const questionContainer = document.getElementById('question-container');
+    const questionText = document.getElementById('question-text');
+    const choicesContainer = document.getElementById('choices-container');
+    const resultContainer = document.getElementById('result-container');
+    const scoreDisplay = document.getElementById('score-display');
+    const totalDisplay = document.getElementById('total-display');
+
+    // --- 4. Core Functions ---
+
+    // Load the current question and generate choice buttons
+    function loadQuestion() {
+        // Clear old choices
+        choicesContainer.innerHTML = '';
+
+        const currentQuizData = quizData[currentQuestionIndex];
+        questionText.innerText = currentQuizData.question;
+
+        // Create a button for each choice
+        currentQuizData.choices.forEach((choice, index) => {
+            const button = document.createElement('button');
+            button.innerText = choice;
+            button.classList.add('choice-btn');
+            // When clicked, check if it's the right answer
+            button.onclick = () => selectAnswer(index);
+            choicesContainer.appendChild(button);
+        });
+    }
+
+    // Handle user selection
+    function selectAnswer(selectedIndex) {
+        const currentQuizData = quizData[currentQuestionIndex];
+
+        // Increment score if correct
+        if (selectedIndex === currentQuizData.correctAnswer) {
+            score++;
+        }
+
+        // Move to the next question
+        currentQuestionIndex++;
+
+        // Check if there are more questions, otherwise show results
+        if (currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    // Hide questions and show the final score
+    function showResults() {
+        questionContainer.style.display = 'none';
+        resultContainer.style.display = 'block';
+        scoreDisplay.innerText = score;
+        totalDisplay.innerText = quizData.length;
+    }
+
+    // Reset variables to restart the quiz
+    function restartQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        questionContainer.style.display = 'block';
+        resultContainer.style.display = 'none';
+        loadQuestion();
+    }
+
+    // --- 5. Initialize App ---
+    // Kick off the app by loading the first question
+    loadQuestion();
+</script>
+
+</body>
+</html>
