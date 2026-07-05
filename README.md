@@ -6,10 +6,7 @@ are *annotations* in the simplest case.
 
 The acronym ClavIA stands for classification via instrumented association.
 
-Little explanatory app
-
-https://kovalp.github.io/association-quality-clavia/
-
+[Little explanatory app](https://kovalp.github.io/association-quality-clavia/)
 
 ## Installation
 
