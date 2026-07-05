@@ -1,3 +1,9 @@
+# 0.3.1
+
+  - Update dependencies.
+  - Add documentation (little explanatory app).
+  - Correcting URLs in `pyproject.toml`.
+
 # 0.3.0
 
   - Return BinClass object from `AssociationQuality.classify`
