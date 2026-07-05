@@ -29,6 +29,7 @@
 
         h2 {
             font-size: 1.4rem;
+            margin-bottom: 10px;
         }
 
         span {
@@ -43,31 +44,83 @@
             font-size: 1rem;
             border: 1px solid #ddd;
             border-radius: 5px;
-            background-color: #fff;
+            background-color: #0f0;
             cursor: pointer;
             transition: background-color 0.2s, transform 0.1s;
         }
 
-        .data-grid {
+        .main-grid {
+            display: grid;
+            /* '1fr 1fr' makes both columns exactly 50% wide, ignoring content */
+            grid-template-columns: 1fr 1fr;
+            column-gap: 10px;
+        }
+
+        .form-grid {
             display: grid;
             grid-template-columns: max-content 0.7fr;
-            column-gap: 10px; /* Space between the colon and the value */
-            row-gap: 5px;     /* Space between the rows */
+            column-gap: 10px;
+            row-gap: 5px;
+            align-items: baseline;
+        }
+        .form-grid > div:nth-child(odd) {
+            text-align: right;
+        }
+        .conf-mat-grid {
+            width: fit-content;
+            margin-top: 10px;
+            justify-content: center;
+            display: grid;
+            grid-template-columns: max-content max-content;
+            gap: 1px;
+            background-color: black;
+        }
+        .conf-mat-grid span {
+            background-color: white;
+            padding: 10px 10px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
 <div id="container">
-    <h2>Input</h2>
-    <div class="data-grid">
-        <div>Annotation ID:</div> <span id="ann">1</span>
-        <div>Update ID:</div> <span id="upd">1</span>
-        <div>Supply:</div> <span id="supply">yes</span>
+    <div class="main-grid">
+        <div>
+            <h2>Input</h2>
+            <div class="form-grid">
+                <div>annotation ID:</div>
+                <span id="ann">1</span>
+                <div>update ID:</div>
+                <span id="upd">1</span>
+                <div>supply:</div>
+                <span id="supply">yes</span>
+            </div>
+        </div>
+        <div>
+            <h2>Output</h2>
+            <div><span id="outcome">TP</span></div>
+        </div>
     </div>
-    <h2>Output</h2>
-    <div><span id="outcome">TP</span></div>
-    <div><input type="button" id="next-btn" value="Next"></div>
+    <div>
+        <input type="button" id="next-btn" value="Next">
+    </div>
+    <div class="main-grid">
+        <div>Confusion matrix</div>
+        <div>Ratios</div>
+        <div class="form-grid">
+            <div># TP</div><span id="cm-tp">1</span>
+            <div># FP</div><span id="cm-fp">0</span>
+            <div># FN</div><span id="cm-fn">0</span>
+            <div># TN</div><span id="cm-tn">0</span>
+        </div>
+        <div class="form-grid">
+            <div>Accuracy</div><span id="ratios-accuracy">1</span>
+            <div>Recall</div><span id="ratios-recall">1</span>
+            <div>Precision</div><span id="ratios-precision">0</span>
+            <div>F1</div> <span id="ratios-f1">0</span>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -77,6 +130,15 @@
     const upd_span = document.getElementById('upd');
     const supply_span = document.getElementById('supply');
     const outcome_span = document.getElementById('outcome');
+    const cm_tp = document.getElementById('cm-tp');
+    const cm_fp = document.getElementById('cm-fp');
+    const cm_fn = document.getElementById('cm-fn');
+    const cm_tn = document.getElementById('cm-tn');
+    const ratios_accuracy = document.getElementById('ratios-accuracy');
+    const ratios_recall = document.getElementById('ratios-recall');
+    const ratios_precision = document.getElementById('ratios-precision');
+    const ratios_f1 = document.getElementById('ratios-f1');
+
     const UPD_ID_LOOSE = -9999;
 
     function get_random_id(len) {
@@ -89,6 +151,14 @@
         FP: 'FP',
         FN: 'FN',
         TN: 'TN'
+    };
+
+    const OutcomeColors = {
+        TP: "#00f",
+        FP: "#f0a",
+        FN: "#f0f",
+        TN: '#0af',
+        error: "#666"
     };
 
     class Classifier {
@@ -122,11 +192,11 @@
                     this.num_fn += 1;
                     return BinClass.FN;
                 } else {
-                    return "error 1";
+                    return "error";
                 }
             } else if (ann_id >= 0 && !is_supplied) {
                 if (ann_id === upd_id) {
-                    return "error 2";
+                    return "error";
                 } else if (upd_id >= 0) {
                     this.num_fp += 1;
                     return BinClass.FP;
@@ -137,7 +207,7 @@
                     this.num_tn += 1;
                     return BinClass.TN;
                 } else {
-                    return "error 3";
+                    return "error";
                 }
             } else if (ann_id === -1) {
                 if (ann_id === upd_id) {
@@ -150,11 +220,17 @@
                     this.num_tn += 1;
                     return BinClass.TN;
                 } else {
-                    return "error 4";
+                    return "error";
                 }
             } else {
-                return "error 5";
+                return "error";
             }
+        }
+        get_color(outcome) {
+            return OutcomeColors[outcome];
+        }
+        get_accuracy() {
+            return (this.num_tp + this.num_tn) / (this.num_fp + this.num_fn + this.num_tp + this.num_tn);
         }
     }
 
@@ -167,13 +243,25 @@
         ann_span.textContent = ann_id.toString();
         upd_span.textContent = upd_id.toString();
         supply_span.textContent = supply ? "yes" : "no";
-        let bin_class = classifier.classify(ann_id, upd_id, supply);
-        outcome_span.textContent = bin_class.toString();
+        let outcome = classifier.classify(ann_id, upd_id, supply);
+        outcome_span.textContent = outcome.toString();
+        outcome_span.style.color = classifier.get_color(outcome);
+        cm_tp.textContent = classifier.num_tp.toString()
+        cm_fp.textContent = classifier.num_fp.toString()
+        cm_fn.textContent = classifier.num_fn.toString()
+        cm_tn.textContent = classifier.num_tn.toString();
+        ratios_accuracy.textContent = classifier.get_accuracy().toFixed(6);
+
     }
 
     nextButton.addEventListener('click', handleNextClick);
-
-    classifier.classify(1,1,true)
+    let outcome = classifier.classify(1, 1, true)
+    outcome_span.style.color = classifier.get_color(outcome);
+    cm_tp.textContent = classifier.num_tp.toString()
+    cm_fp.textContent = classifier.num_fp.toString()
+    cm_fn.textContent = classifier.num_fn.toString()
+    cm_tn.textContent = classifier.num_tn.toString();
+    ratios_accuracy.textContent = classifier.get_accuracy().toFixed(6);
 
 </script>
 
