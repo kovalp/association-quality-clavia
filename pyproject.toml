@@ -16,8 +16,8 @@ dependencies = []
 
 
 [project.urls]
-Repository = "https://github.com/kovalp/association-tracking-clavia"
-ChangeLog = "https://github.com/kovalp/association-tracking-clavia/blob/main/CHANGELOG.md"
+Repository = "https://github.com/kovalp/association-quality-clavia"
+ChangeLog = "https://github.com/kovalp/association-quality-clavia/blob/main/CHANGELOG.md"
 Documentation = "https://kovalp.github.io/association-quality-clavia"
 
 [tool.uv]
