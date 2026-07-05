@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification via instrumented association (ClavIA).</title>
+    <style>
+        /* Basic Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        #container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+        }
+
+        span {
+            font-size: 1.5rem;
+        }
+
+        #next-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: max-content 0.7fr;
+            column-gap: 10px; /* Space between the colon and the value */
+            row-gap: 5px;     /* Space between the rows */
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <h2>Input</h2>
+    <div class="data-grid">
+        <div>Annotation ID:</div> <span id="ann">1</span>
+        <div>Update ID:</div> <span id="upd">1</span>
+        <div>Supply:</div> <span id="supply">yes</span>
+    </div>
+    <h2>Output</h2>
+    <div><span id="outcome">TP</span></div>
+    <div><input type="button" id="next-btn" value="Next"></div>
+</div>
+
+<script>
+    const ids = [0, 1, -1, -9999];
+    const nextButton = document.getElementById('next-btn');
+    const ann_span = document.getElementById('ann');
+    const upd_span = document.getElementById('upd');
+    const supply_span = document.getElementById('supply');
+    const outcome_span = document.getElementById('outcome');
+    const UPD_ID_LOOSE = -9999;
+
+    function get_random_id(len) {
+        const randomIndex = Math.floor(Math.random() * len);
+        return ids[randomIndex];
+    }
+
+    const BinClass = {
+        TP: 'TP',
+        FP: 'FP',
+        FN: 'FN',
+        TN: 'TN'
+    };
+
+    class Classifier {
+        constructor() {
+            this.num_tp = 0;
+            this.num_fn = 0;
+            this.num_fp = 0;
+            this.num_tn = 0;
+        }
+
+        /**
+         * Classify and accumulate the results of an association.
+         *
+         * @param {number} ann_id - The annotation ID from the instrumented target.
+         * @param {number} upd_id - The update ID from the instrumented target.
+         * @param {boolean} is_supplied - Indicates if the detection was supplied to tracker.
+         * @returns {string} The BinClass enumerable value.
+         */
+        classify(ann_id, upd_id, is_supplied) {
+            if (ann_id >= 0 && is_supplied) {
+                if (ann_id === upd_id) {
+                    this.num_tp += 1;
+                    return BinClass.TP;
+                } else if (upd_id >= 0) {
+                    this.num_fn += 1;
+                    return BinClass.FN;
+                } else if (upd_id === -1) {
+                    this.num_fn += 1;
+                    return BinClass.FN;
+                } else if (upd_id === UPD_ID_LOOSE) {
+                    this.num_fn += 1;
+                    return BinClass.FN;
+                } else {
+                    return "error 1";
+                }
+            } else if (ann_id >= 0 && !is_supplied) {
+                if (ann_id === upd_id) {
+                    return "error 2";
+                } else if (upd_id >= 0) {
+                    this.num_fp += 1;
+                    return BinClass.FP;
+                } else if (upd_id === -1) {
+                    this.num_fp += 1;
+                    return BinClass.FP;
+                } else if (upd_id === UPD_ID_LOOSE) {
+                    this.num_tn += 1;
+                    return BinClass.TN;
+                } else {
+                    return "error 3";
+                }
+            } else if (ann_id === -1) {
+                if (ann_id === upd_id) {
+                    this.num_tn += 1;
+                    return BinClass.TN;
+                } else if (upd_id >= 0) {
+                    this.num_fp += 1;
+                    return BinClass.FP;
+                } else if (upd_id === UPD_ID_LOOSE) {
+                    this.num_tn += 1;
+                    return BinClass.TN;
+                } else {
+                    return "error 4";
+                }
+            } else {
+                return "error 5";
+            }
+        }
+    }
+
+    let classifier = new Classifier();
+
+    function handleNextClick() {
+        const ann_id = get_random_id(3);
+        const upd_id = get_random_id(4);
+        const supply = get_random_id(2) === 1;
+        ann_span.textContent = ann_id.toString();
+        upd_span.textContent = upd_id.toString();
+        supply_span.textContent = supply ? "yes" : "no";
+        let bin_class = classifier.classify(ann_id, upd_id, supply);
+        outcome_span.textContent = bin_class.toString();
+    }
+
+    nextButton.addEventListener('click', handleNextClick);
+
+    classifier.classify(1,1,true)
+
+</script>
+
+</body>
+</html>
