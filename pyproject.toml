@@ -1,6 +1,6 @@
 [project]
 name = "association-quality-clavia"
-version = "0.3.0"
+version = "0.3.1"
 description = "Enable binary classification of the association in multiple-object tracking."
 readme = "README.md"
 authors = [
@@ -9,7 +9,7 @@ authors = [
 maintainers = [
     { name = "Peter Koval", email = "koval.peter@gmail.com" }
 ]
-keywords = ['tracking by detection', 'binary classification', 'association quality', '']
+keywords = ['tracking by detection', 'binary classification', 'association quality']
 
 requires-python = ">=3.8"
 dependencies = []
@@ -18,6 +18,7 @@ dependencies = []
 [project.urls]
 Repository = "https://github.com/kovalp/association-tracking-clavia"
 ChangeLog = "https://github.com/kovalp/association-tracking-clavia/blob/main/CHANGELOG.md"
+Documentation = "https://kovalp.github.io/association-quality-clavia"
 
 [tool.uv]
 package = true

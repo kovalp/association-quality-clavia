@@ -6,6 +6,8 @@ are *annotations* in the simplest case.
 
 The acronym ClavIA stands for classification via instrumented association.
 
+[Little explanatory app](https://kovalp.github.io/association-quality-clavia/)
+
 ## Installation
 
 Should be as easy as `pip install association-quality-clavia`, but if you downloaded the repo,
@@ -30,3 +32,4 @@ The use of the module will be demonstrated in the package
 [`eval-ab-3d-mot`](https://github.com/kovalp/eval-ab-3d-mot).
 The package `eval-ab-3d-mot` features the evaluation part extracted from the original
 AB3DMOT as well as the code to use the association classifier from this package.
+
