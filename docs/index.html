@@ -26,16 +26,46 @@
             max-width: 450px;
             text-align: center;
         }
-
         h2 {
             font-size: 1.4rem;
             margin-bottom: 10px;
         }
-
         span {
             font-size: 1.5rem;
         }
-
+        .tp-color {
+            color: #00f;
+        }
+        .fp-color {
+            color: #f0a;
+        }
+        .fn-color {
+            color: #f0f;
+        }
+        .tn-color {
+            color: #0af;
+        }
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
         #next-btn {
             display: block;
             width: 100%;
@@ -48,14 +78,15 @@
             cursor: pointer;
             transition: background-color 0.2s, transform 0.1s;
         }
-
+        #next-btn:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
         .main-grid {
             display: grid;
-            /* '1fr 1fr' makes both columns exactly 50% wide, ignoring content */
             grid-template-columns: 1fr 1fr;
             column-gap: 10px;
         }
-
         .form-grid {
             display: grid;
             grid-template-columns: max-content 0.7fr;
@@ -66,20 +97,6 @@
         .form-grid > div:nth-child(odd) {
             text-align: right;
         }
-        .conf-mat-grid {
-            width: fit-content;
-            margin-top: 10px;
-            justify-content: center;
-            display: grid;
-            grid-template-columns: max-content max-content;
-            gap: 1px;
-            background-color: black;
-        }
-        .conf-mat-grid span {
-            background-color: white;
-            padding: 10px 10px;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -89,61 +106,50 @@
         <div>
             <h2>Input</h2>
             <div class="form-grid">
-                <div>annotation ID:</div>
+                <div title="Detection ID at target creation time.">annotation ID:</div>
                 <span id="ann">1</span>
-                <div>update ID:</div>
+                <div title="Detection ID if associated or -9999 (unmatch flag) if not associated.">update ID:</div>
                 <span id="upd">1</span>
-                <div>supply:</div>
+                <div title="Whether the annotation ID is present among detections.">supply:</div>
                 <span id="supply">yes</span>
             </div>
+            </div>
+            <div>
+                <h2>Output</h2>
+                <div title="Binary class of the association outcome."><span id="outcome">TP</span></div>
+            </div>
         </div>
-        <div>
-            <h2>Output</h2>
-            <div><span id="outcome">TP</span></div>
-        </div>
-    </div>
     <div>
-        <input type="button" id="next-btn" value="Next">
+        <input type="button" id="next-btn" value="Next" title="Random choice of annotation ID, update IDs and supply.">
     </div>
+    <div style="margin-bottom: 20px"></div>
     <div class="main-grid">
-        <div>Confusion matrix</div>
-        <div>Ratios</div>
+
+        <div title="Number of TPs, FNs, FNs and TNs seen so far.">Confusion matrix</div>
+        <div style="margin-bottom: 15px">Ratios</div>
+
         <div class="form-grid">
-            <div># TP</div><span id="cm-tp">1</span>
-            <div># FP</div><span id="cm-fp">0</span>
-            <div># FN</div><span id="cm-fn">0</span>
-            <div># TN</div><span id="cm-tn">0</span>
+            <div title="Number of true positives." class="tp-color"># TP</div><span id="cm-tp" class="tp-color">1</span>
+            <div title="Number of false positives." class="fp-color"># FP</div><span id="cm-fp" class="fp-color">0</span>
+            <div title="Number of false negatives." class="fn-color"># FN</div><span id="cm-fn" class="fn-color">0</span>
+            <div title="Number of true negatives." class="tn-color"># TN</div><span id="cm-tn" class="tn-color">0</span>
         </div>
         <div class="form-grid">
-            <div>Accuracy</div><span id="ratios-accuracy">1</span>
-            <div>Recall</div><span id="ratios-recall">1</span>
-            <div>Precision</div><span id="ratios-precision">0</span>
-            <div>F1</div> <span id="ratios-f1">0</span>
+            <div title="A = (TP + TN) / (TP + TN + FP + FN)">Accuracy</div><span id="ratios-accuracy">1</span>
+            <div title="R = TP / (TP + FN)">Recall</div><span id="ratios-recall">1</span>
+            <div title="P = TP / (TP + FP)">Precision</div><span id="ratios-precision">0</span>
+            <div title="F1=sqrt(R P)">F1</div> <span id="ratios-f1">0</span>
         </div>
     </div>
 </div>
 
 <script>
-    const ids = [0, 1, -1, -9999];
+    const ids = [0, 1, 0, 0, -1, -9999];
     const nextButton = document.getElementById('next-btn');
-    const ann_span = document.getElementById('ann');
-    const upd_span = document.getElementById('upd');
-    const supply_span = document.getElementById('supply');
-    const outcome_span = document.getElementById('outcome');
-    const cm_tp = document.getElementById('cm-tp');
-    const cm_fp = document.getElementById('cm-fp');
-    const cm_fn = document.getElementById('cm-fn');
-    const cm_tn = document.getElementById('cm-tn');
-    const ratios_accuracy = document.getElementById('ratios-accuracy');
-    const ratios_recall = document.getElementById('ratios-recall');
-    const ratios_precision = document.getElementById('ratios-precision');
-    const ratios_f1 = document.getElementById('ratios-f1');
-
     const UPD_ID_LOOSE = -9999;
 
     function get_random_id(len) {
-        const randomIndex = Math.floor(Math.random() * len);
-        return ids[randomIndex];
+        return ids[Math.floor(Math.random() * len)];
     }
 
     const BinClass = {
@@ -226,43 +232,67 @@
                 return "error";
             }
         }
-        get_color(outcome) {
-            return OutcomeColors[outcome];
-        }
         get_accuracy() {
             return (this.num_tp + this.num_tn) / (this.num_fp + this.num_fn + this.num_tp + this.num_tn);
+        }
+
+        get_recall() {
+            return this.num_tp / (this.num_tp + this.num_fn);
+        }
+        get_precision() {
+            return this.num_tp / (this.num_tp + this.num_fp);
+        }
+        get_f1() {
+            return Math.sqrt(this.get_recall() * this.get_precision());
+        }
+    }
+
+        class Frontend{
+        constructor() {
+            this.ann_span = document.getElementById('ann');
+            this.upd_span = document.getElementById('upd');
+            this.supply_span = document.getElementById('supply');
+            this.outcome_span = document.getElementById('outcome');
+            this.cm_tp = document.getElementById('cm-tp');
+            this.cm_fp = document.getElementById('cm-fp');
+            this.cm_fn = document.getElementById('cm-fn');
+            this.cm_tn = document.getElementById('cm-tn');
+            this.ratios_accuracy = document.getElementById('ratios-accuracy');
+            this.ratios_recall = document.getElementById('ratios-recall');
+            this.ratios_precision = document.getElementById('ratios-precision');
+            this.ratios_f1 = document.getElementById('ratios-f1');
+        }
+
+        update(classifier, ann_id, upd_id, supply) {
+            this.ann_span.textContent = ann_id.toString();
+            this.upd_span.textContent = upd_id.toString();
+            this.supply_span.textContent = supply ? "yes" : "no";
+            const outcome = classifier.classify(ann_id, upd_id, supply);
+            this.outcome_span.textContent = outcome.toString();
+            this.outcome_span.style.color = OutcomeColors[outcome];
+            this.cm_tp.textContent = classifier.num_tp.toString()
+            this.cm_fp.textContent = classifier.num_fp.toString()
+            this.cm_fn.textContent = classifier.num_fn.toString()
+            this.cm_tn.textContent = classifier.num_tn.toString();
+            this.ratios_accuracy.textContent = classifier.get_accuracy().toFixed(6);
+            this.ratios_recall.textContent = classifier.get_recall().toFixed(4);
+            this.ratios_precision.textContent = classifier.get_precision().toFixed(4);
+            this.ratios_f1.textContent = classifier.get_f1().toFixed(4);
         }
     }
 
     let classifier = new Classifier();
+    let front = new Frontend();
 
     function handleNextClick() {
-        const ann_id = get_random_id(3);
-        const upd_id = get_random_id(4);
+        const ann_id = get_random_id(5);
+        const upd_id = get_random_id(6);
         const supply = get_random_id(2) === 1;
-        ann_span.textContent = ann_id.toString();
-        upd_span.textContent = upd_id.toString();
-        supply_span.textContent = supply ? "yes" : "no";
-        let outcome = classifier.classify(ann_id, upd_id, supply);
-        outcome_span.textContent = outcome.toString();
-        outcome_span.style.color = classifier.get_color(outcome);
-        cm_tp.textContent = classifier.num_tp.toString()
-        cm_fp.textContent = classifier.num_fp.toString()
-        cm_fn.textContent = classifier.num_fn.toString()
-        cm_tn.textContent = classifier.num_tn.toString();
-        ratios_accuracy.textContent = classifier.get_accuracy().toFixed(6);
-
+        front.update(classifier, ann_id, upd_id, supply);
     }
 
     nextButton.addEventListener('click', handleNextClick);
-    let outcome = classifier.classify(1, 1, true)
-    outcome_span.style.color = classifier.get_color(outcome);
-    cm_tp.textContent = classifier.num_tp.toString()
-    cm_fp.textContent = classifier.num_fp.toString()
-    cm_fn.textContent = classifier.num_fn.toString()
-    cm_tn.textContent = classifier.num_tn.toString();
-    ratios_accuracy.textContent = classifier.get_accuracy().toFixed(6);
-
+    front.update(classifier, 1, 1, true);
 </script>
 
 </body>
