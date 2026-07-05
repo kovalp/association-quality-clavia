@@ -1,0 +1,104 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #333;
+}
+
+#container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+}
+
+span {
+    font-size: 1.5rem;
+}
+
+.tp-color {
+    color: #00f;
+}
+
+.fp-color {
+    color: #f0a;
+}
+
+.fn-color {
+    color: #f0f;
+}
+
+.tn-color {
+    color: #0af;
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+#next-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #0f0;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#next-btn:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: max-content 0.7fr;
+    column-gap: 10px;
+    row-gap: 5px;
+    align-items: baseline;
+}
+
+.form-grid > div:nth-child(odd) {
+    text-align: right;
+}
