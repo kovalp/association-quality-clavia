@@ -9,7 +9,7 @@ body {
     color: #333;
 }
 
-#container {
+.main-container {
     background: white;
     padding: 30px;
     border-radius: 10px;
@@ -29,19 +29,19 @@ span {
 }
 
 .tp-color {
-    color: #00f;
+    color: blue;
 }
 
 .fp-color {
-    color: #f0a;
+    color: magenta;
 }
 
 .fn-color {
-    color: #f0f;
+    color: orangered;
 }
 
 .tn-color {
-    color: #0af;
+    color: deepskyblue;
 }
 
 .tooltip-container {
@@ -67,7 +67,7 @@ span {
     transition: opacity 0.3s;
 }
 
-#next-btn {
+.next-btn {
     display: block;
     width: 100%;
     padding: 12px;
@@ -75,12 +75,21 @@ span {
     font-size: 1rem;
     border: 1px solid #ddd;
     border-radius: 5px;
-    background-color: #0f0;
+    background-color: lawngreen;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.1s;
 }
 
-#next-btn:hover .tooltip-text {
+.next-btn:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.quiz-btn {
+    background-color: yellow;
+}
+
+.quiz-btn:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
 }
@@ -101,4 +110,9 @@ span {
 
 .form-grid > div:nth-child(odd) {
     text-align: right;
+}
+
+/* Add this anywhere in your CSS file */
+.hidden {
+    display: none !important;
 }

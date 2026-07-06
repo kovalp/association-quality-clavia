@@ -1,42 +1,35 @@
-const OutcomeColors = {
-    TP: "#00f",
-    FP: "#f0a",
-    FN: "#f0f",
-    TN: '#0af',
-    error: "#666"
-};
+import {FrontendWatch} from "./front_watch.js";
+
+const NUM_TRAIN_RUNS_MAX = 1;
 
 class Frontend {
     constructor() {
-        this.ann_span = document.getElementById('ann');
-        this.upd_span = document.getElementById('upd');
-        this.supply_span = document.getElementById('supply');
-        this.outcome_span = document.getElementById('outcome');
-        this.cm_tp = document.getElementById('cm-tp');
-        this.cm_fp = document.getElementById('cm-fp');
-        this.cm_fn = document.getElementById('cm-fn');
-        this.cm_tn = document.getElementById('cm-tn');
-        this.ratios_accuracy = document.getElementById('ratios-accuracy');
-        this.ratios_recall = document.getElementById('ratios-recall');
-        this.ratios_precision = document.getElementById('ratios-precision');
-        this.ratios_f1 = document.getElementById('ratios-f1');
+        this.watch = new FrontendWatch();
+        this.num_updates = 0
+        this.quiz_container = document.getElementById('container-quiz');
+        this.watch_container = document.getElementById('container-watch');
+        this.watch_btn = document.getElementById('watch-btn');
+        this.watch_btn.addEventListener('click', this.show_watch.bind(this));
+        this.quiz_btn = document.getElementById('quiz-btn');
+        this.quiz_btn.addEventListener('click', this.show_quiz.bind(this));
+    }
+
+    show_quiz() {
+        this.quiz_container.classList.remove('hidden');
+        this.watch_container.classList.add('hidden');
+    }
+
+    show_watch() {
+        this.quiz_container.classList.add('hidden');
+        this.watch_container.classList.remove('hidden');
     }
 
     update(classifier, ann_id, upd_id, supply) {
-        this.ann_span.textContent = ann_id.toString();
-        this.upd_span.textContent = upd_id.toString();
-        this.supply_span.textContent = supply ? "yes" : "no";
-        const outcome = classifier.classify(ann_id, upd_id, supply);
-        this.outcome_span.textContent = outcome.toString();
-        this.outcome_span.style.color = OutcomeColors[outcome];
-        this.cm_tp.textContent = classifier.num_tp.toString()
-        this.cm_fp.textContent = classifier.num_fp.toString()
-        this.cm_fn.textContent = classifier.num_fn.toString()
-        this.cm_tn.textContent = classifier.num_tn.toString();
-        this.ratios_accuracy.textContent = classifier.get_accuracy().toFixed(6);
-        this.ratios_recall.textContent = classifier.get_recall().toFixed(4);
-        this.ratios_precision.textContent = classifier.get_precision().toFixed(4);
-        this.ratios_f1.textContent = classifier.get_f1().toFixed(4);
+        this.watch.update(classifier, ann_id, upd_id, supply);
+        this.num_updates++;
+        if (this.num_updates > NUM_TRAIN_RUNS_MAX) {
+            this.quiz_btn.classList.remove("hidden");
+        }
     }
 }
 
