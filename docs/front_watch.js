@@ -1,6 +1,6 @@
 import { OutcomeColors } from "./outcome_colors.js";
 
-class FrontendWatch {
+class FrontWatch {
     constructor() {
         this.ann_span = document.getElementById('ann');
         this.upd_span = document.getElementById('upd');
@@ -14,6 +14,7 @@ class FrontendWatch {
         this.ratios_recall = document.getElementById('ratios-recall');
         this.ratios_precision = document.getElementById('ratios-precision');
         this.ratios_f1 = document.getElementById('ratios-f1');
+        this.next_btn = document.getElementById('next-btn');
     }
 
     update(classifier, ann_id, upd_id, supply) {
@@ -34,5 +35,4 @@ class FrontendWatch {
     }
 }
 
-
-export {FrontendWatch};
+export {FrontWatch};

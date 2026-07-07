@@ -44,6 +44,18 @@ span {
     color: deepskyblue;
 }
 
+.correct-color {
+    background-color: lawngreen !important;
+}
+
+.wrong-color {
+    background-color: red !important;
+}
+
+.neutral-color {
+    background-color: lightgray !important;
+}
+
 .tooltip-container {
     position: relative;
     display: inline-block;
@@ -112,7 +124,18 @@ span {
     text-align: right;
 }
 
-/* Add this anywhere in your CSS file */
 .hidden {
     display: none !important;
+}
+
+.long-story {
+    display: flex;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: lightgray;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
 }
