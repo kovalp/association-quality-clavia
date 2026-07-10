@@ -1,4 +1,3 @@
-import { OutcomeColors } from "./outcome_colors.js";
 
 class FrontQuiz {
     constructor() {
@@ -35,11 +34,11 @@ class FrontQuiz {
          this.score.textContent = `${this.num_correct} / ${this.num_total}`;
     }
 
-    update(ann_id, upd_id, supply, answer) {
-        this.ann.textContent = ann_id.toString();
-        this.upd.textContent = upd_id.toString();
-        this.supply.textContent = supply ? "yes" : "no";
-        this.answer = answer;
+    update(ci) {
+        this.ann.textContent = ci.format_id(ci.ann_id);
+        this.upd.textContent = ci.format_id(ci.upd_id);
+        this.supply.textContent = ci.format_supply();
+        this.answer = ci.bin_class;
         this.radio_tp.checked = false;
         this.radio_fp.checked = false;
         this.radio_fn.checked = false;

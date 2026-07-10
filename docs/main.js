@@ -1,5 +1,5 @@
-import { Classifier, UPD_ID_LOOSE } from './classifier.js';
 import { Frontend } from './frontend.js';
+import { Accumulator, ClavIAInput, UPD_ID_LOOSE } from "./table.js";
 
 const ids = [0, 1, 0, 0, -1, UPD_ID_LOOSE];
 
@@ -7,31 +7,32 @@ function get_random_id(len) {
     return ids[Math.floor(Math.random() * len)];
 }
 
-let classifier = new Classifier();
+let accumulator = new Accumulator();
 let front = new Frontend();
 
-function handle_next_watch() {
-    const ann_id = get_random_id(5);
-    const upd_id = get_random_id(6);
-    const supply = get_random_id(2) === 1;
-    front.update_watch(classifier, ann_id, upd_id, supply);
+
+function get_next_case() {
+    let ci = new ClavIAInput();
+    while (ci.bin_class === "error") {
+        ci.classify(get_random_id(5), get_random_id(6), get_random_id(2) === 1);
+    }
+    return ci;
 }
 
+function handle_next_watch() {
+    const ci = get_next_case();
+    accumulator.accumulate(ci.bin_class)
+    front.update_watch(accumulator, ci);
+}
+
+
 function handle_next_quiz() {
-    let answer = "error";
-    let ann_id = 0;
-    let upd_id = 0;
-    let supply = false;
-    while (answer === "error") {
-        ann_id = get_random_id(5);
-        upd_id = get_random_id(6);
-        supply = get_random_id(2) === 1;
-        answer = classifier.classify(ann_id, upd_id, supply);
-    }
-    front.quiz.update(ann_id, upd_id, supply, answer);
+    const ci = get_next_case();
+    front.quiz.update(ci);
 }
 
 front.watch.next_btn.addEventListener('click', handle_next_watch);
 front.quiz.next_btn.addEventListener('click', handle_next_quiz);
 
-front.update_watch(classifier, 1, 1, true);
+const first_io = new ClavIAInput(0, 0, true);
+front.update_watch(accumulator, first_io);

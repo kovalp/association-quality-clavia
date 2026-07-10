@@ -10,8 +10,8 @@ class Frontend {
         this.quiz = new FrontQuiz();
     }
 
-    update_watch(classifier, ann_id, upd_id, supply) {
-        this.watch.update(classifier, ann_id, upd_id, supply);
+    update_watch(accumulator, ci) {
+        this.watch.update(accumulator, ci);
         this.switch.update();
     }
 

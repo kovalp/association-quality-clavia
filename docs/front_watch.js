@@ -15,23 +15,24 @@ class FrontWatch {
         this.ratios_precision = document.getElementById('ratios-precision');
         this.ratios_f1 = document.getElementById('ratios-f1');
         this.next_btn = document.getElementById('next-btn');
+        this.plain_english = document.getElementById('plain-english');
     }
 
-    update(classifier, ann_id, upd_id, supply) {
-        this.ann_span.textContent = ann_id.toString();
-        this.upd_span.textContent = upd_id.toString();
-        this.supply_span.textContent = supply ? "yes" : "no";
-        const outcome = classifier.classify(ann_id, upd_id, supply);
-        this.outcome_span.textContent = outcome.toString();
-        this.outcome_span.style.color = OutcomeColors[outcome];
-        this.cm_tp.textContent = classifier.num_tp.toString()
-        this.cm_fp.textContent = classifier.num_fp.toString()
-        this.cm_fn.textContent = classifier.num_fn.toString()
-        this.cm_tn.textContent = classifier.num_tn.toString();
-        this.ratios_accuracy.textContent = classifier.get_accuracy().toFixed(6);
-        this.ratios_recall.textContent = classifier.get_recall().toFixed(4);
-        this.ratios_precision.textContent = classifier.get_precision().toFixed(4);
-        this.ratios_f1.textContent = classifier.get_f1().toFixed(4);
+    update(accumulator, ci) {
+        this.ann_span.textContent = ci.format_id(ci.ann_id);
+        this.upd_span.textContent = ci.format_id(ci.upd_id);
+        this.supply_span.textContent = ci.format_supply();
+        this.outcome_span.textContent = ci.bin_class.toString();
+        this.outcome_span.style.color = OutcomeColors[ci.bin_class];
+        this.cm_tp.textContent = accumulator.num_tp.toString()
+        this.cm_fp.textContent = accumulator.num_fp.toString()
+        this.cm_fn.textContent = accumulator.num_fn.toString()
+        this.cm_tn.textContent = accumulator.num_tn.toString();
+        this.ratios_accuracy.textContent = accumulator.get_accuracy().toFixed(6);
+        this.ratios_recall.textContent = accumulator.get_recall().toFixed(4);
+        this.ratios_precision.textContent = accumulator.get_precision().toFixed(4);
+        this.ratios_f1.textContent = accumulator.get_f1().toFixed(4);
+        this.plain_english.textContent = ci.get_plain_english();
     }
 }
 
