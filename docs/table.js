@@ -159,25 +159,39 @@ class ClavIAInput{
         return this.supply ? "yes" : "no";
     }
 
-    get_plain_english(){
-        if (this.case_num === 1){
-            return `The target was created from a real object with ID ${this.ann_id}.
-            The annotation ID ${this.ann_id} is present among detection IDs.
-            The matching is done to the same ID. Thus, this is true positive (TP).`
-        } else if (this.case_num === 2) {
-            return `The target was created from a real object with ID ${this.ann_id}.
-            The annotation ID ${this.ann_id} is present among detection IDs.
-            However, the association is done to a different real object with ID ${this.upd_id}.
-            Thus, this is false negative (FN).`
-        }
-        else {
-            return this.case_num.toString();
-        }
-
+    format_1_sentence(){
+        const obj_type = this.ann_id >= 0 ? "real object": "clutter";
+        const cond_eng = this.ann_id >= 0 ? "≥ 0": "= -1";
+        return `The target was created from a ${obj_type} (annotation ID ${cond_eng}).`
     }
 
+    format_2_sentence(){
+        const supply_eng = this.supply ? "present among" : "absent from";
+        const supply_flg = this.format_supply();
+        return `The annotation ID is ${supply_eng} detection IDs (supply ${supply_flg}).`;
+    }
 
+    get_plain_english(){
+        const fs = `Case ${this.case_num}: ${this.format_1_sentence()}`;
+        const ss = this.format_2_sentence();
+        const uib = `(update ID ${this.upd_id})`;
+        switch (this.case_num) {
+            case 1: return `${fs} ${ss} The matching is done to the same ID. Thus, this is true positive (TP).`;
+            case 2: return `${fs} ${ss} However, the association is done to a different real object ${uib}. Thus, this is false negative (FN).`
+            case 3: return `${fs} ${ss} However, the association is done to a clutter detection ${uib}. Thus, this is false negative (FN).`
+            case 4: return `${fs} ${ss} However, the association resulted in unmatched state ${uib}. Thus, this is false negative (FN).`
+            case 5: return `${fs} ${ss} Magically, the association happens to the same ID ${uib}. This is impossible by construction and indicates implementation error.`
+            case 6: return `${fs} ${ss} The association is done to another real-object detection ${uib}. Thus, this is false positive (FP).`
+            case 7: return `${fs} ${ss} The association is done to a clutter detection ${uib}. Thus, this is false positive (FP).`
+            case 8: return `${fs} ${ss} The association resulted in unmatched state ${uib}. Thus, this is true negative (TN).`
+            case 9: return `${fs} The association is done to another clutter detection ${uib}. Thus, this is true negative (TN).`
+            case 10: return `${fs} The association is done to another real-object detection ${uib}. Thus, this is false positive (FP).`
+            case 11: return `${fs} The association is done to another clutter detection ${uib}. Thus, this is true negative (TN).`
+            case 12: return `${fs} The association resulted in unmatched state ${uib}. Thus, this is true negative (TN).`
+            default: return `${fs} ${ss} The association resulted in ${this.format_id(this.upd_id)} (update ID ${this.upd_id}).
+            This does not comply with the construction and indicates implementation error.`
+        }
+    }
 }
 
 export {get_case, get_bin_class, Accumulator, ClavIAInput, UPD_ID_LOOSE};
-

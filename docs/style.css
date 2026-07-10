@@ -15,7 +15,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 450px;
+    max-width: 550px;
     text-align: center;
 }
 
@@ -137,5 +137,17 @@ span {
     border-radius: 5px;
     background-color: lightgray;
     cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.plain-english {
+    display: flex;
+    text-align: justify;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: lightyellow;
     transition: background-color 0.2s, transform 0.1s;
 }
