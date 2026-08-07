@@ -1,0 +1,153 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #333;
+}
+
+.main-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 550px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+}
+
+span {
+    font-size: 1.5rem;
+}
+
+.tp-color {
+    color: blue;
+}
+
+.fp-color {
+    color: magenta;
+}
+
+.fn-color {
+    color: orangered;
+}
+
+.tn-color {
+    color: deepskyblue;
+}
+
+.correct-color {
+    background-color: lawngreen !important;
+}
+
+.wrong-color {
+    background-color: red !important;
+}
+
+.neutral-color {
+    background-color: lightgray !important;
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.next-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: lawngreen;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.next-btn:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.quiz-btn {
+    background-color: yellow;
+}
+
+.quiz-btn:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: max-content 0.7fr;
+    column-gap: 10px;
+    row-gap: 5px;
+    align-items: baseline;
+}
+
+.form-grid > div:nth-child(odd) {
+    text-align: right;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.long-story {
+    display: flex;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: lightgray;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.plain-english {
+    display: flex;
+    text-align: justify;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: lightyellow;
+    transition: background-color 0.2s, transform 0.1s;
+}

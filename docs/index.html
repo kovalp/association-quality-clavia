@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification via instrumented association (ClavIA).</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="container-watch" class="main-container">
+    <a href="https://doi.org/10.20944/preprints202607.2039.v1" class="long-story"> Long story (preprint)</a>
+    <div class="main-grid">
+        <div>
+            <h2>Input</h2>
+            <div class="form-grid">
+                <div title="Detection ID at target creation time.">annotation ID:</div>
+                <span id="ann">1</span>
+                <div title="Detection ID if associated or -9999 (unmatch flag) if not associated.">update ID:</div>
+                <span id="upd">1</span>
+                <div title="Whether the annotation ID is present among detections.">supply:</div>
+                <span id="supply">yes</span>
+            </div>
+        </div>
+        <div>
+            <h2>Output</h2>
+            <div title="Binary class of the association outcome."><span id="outcome">TP</span></div>
+        </div>
+    </div>
+    <div>
+        <input type="button" id="next-btn" class="next-btn" value="Next"
+               title="Random choice of annotation ID, update IDs and supply.">
+    </div>
+    <div style="margin-bottom: 20px"></div>
+    <div id="plain-english" class="plain-english"></div>
+    <div class="main-grid hidden">
+        <div title="Number of TPs, FNs, FNs and TNs seen so far.">Confusion matrix</div>
+        <div style="margin-bottom: 15px">Ratios</div>
+        <div class="form-grid">
+            <div title="Number of true positives." class="tp-color"># TP</div>
+            <span id="cm-tp" class="tp-color">1</span>
+            <div title="Number of false positives." class="fp-color"># FP</div>
+            <span id="cm-fp" class="fp-color">0</span>
+            <div title="Number of false negatives." class="fn-color"># FN</div>
+            <span id="cm-fn" class="fn-color">0</span>
+            <div title="Number of true negatives." class="tn-color"># TN</div>
+            <span id="cm-tn" class="tn-color">0</span>
+        </div>
+        <div class="form-grid">
+            <div title="A = (TP + TN) / (TP + TN + FP + FN)">Accuracy</div>
+            <span id="ratios-accuracy">1</span>
+            <div title="R = TP / (TP + FN)">Recall</div>
+            <span id="ratios-recall">1</span>
+            <div title="P = TP / (TP + FP)">Precision</div>
+            <span id="ratios-precision">0</span>
+            <div title="F1=sqrt(R P)">F1</div>
+            <span id="ratios-f1">0</span>
+        </div>
+    </div>
+    <div style="margin-bottom: 15px"></div>
+    <input type="button" id="quiz-btn" title="Quiz mode..." value="I want a quiz..." class="next-btn quiz-btn hidden">
+</div>
+
+<div id="container-quiz" class="main-container hidden">
+    <div class="main-grid">
+        <div>
+            <h2>Input</h2>
+            <div class="form-grid">
+                <div title="Detection ID at target creation time.">annotation ID:</div>
+                <span id="ann-quiz">1</span>
+                <div title="Detection ID if associated or -9999 (unmatch flag) if not associated.">update ID:</div>
+                <span id="upd-quiz">1</span>
+                <div title="Whether the annotation ID is present among detections.">supply:</div>
+                <span id="supply-quiz">yes</span>
+            </div>
+        </div>
+        <div>
+            <h2>Classify the Input</h2>
+            <div class="form-grid">
+            <label for="TP" title="True positive" class="tp-color">TP</label>
+                <input type="radio" id="TP" class="tp-color" name="quiz-answer">
+            <label for="FP" title="False positive" class="fp-color">FP</label>
+                <input type="radio" id="FP" class="fp-color" name="quiz-answer">
+            <label for="FN" title="False negative" class="fn-color">FN</label>
+                <input type="radio" id="FN" class="fp-color" name="quiz-answer">
+            <label for="TN" title="True negative" class="tn-color">TN</label>
+                <input type="radio" id="TN" class="tn-color" name="quiz-answer">
+        </div>
+        </div>
+    </div>
+    <div>
+        <input type="button" id="next-quiz" class="next-btn neutral-color" value="Next case" title="Next combination of IDs and supply flag.">
+    </div>
+    <div class="main-grid">
+        <div title="Score">Score: <span id="quiz-score">0 / 0</span></div>
+    </div>
+    <div style="margin-bottom: 20px"></div>
+    <input type="button" id="watch-btn" title="I want to watch..." value="I want to learn..." class="next-btn quiz-btn">
+</div>
+
+<script type="module" src="main.js"></script>
+
+</body>
+</html>
