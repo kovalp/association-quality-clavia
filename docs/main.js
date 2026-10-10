@@ -35,4 +35,5 @@ front.watch.next_btn.addEventListener('click', handle_next_watch);
 front.quiz.next_btn.addEventListener('click', handle_next_quiz);
 
 const first_io = new ClavIAInput(0, 0, true);
+accumulator.accumulate(first_io.bin_class);
 front.update_watch(accumulator, first_io);

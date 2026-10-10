@@ -84,6 +84,11 @@ function get_bin_class(case_num){
 }
 
 
+function safe_ratio(numerator, denominator) {
+    return denominator === 0 ? 0 : numerator / denominator;
+}
+
+
 class Accumulator {
     constructor() {
         this.num_tp = 0;
@@ -108,19 +113,21 @@ class Accumulator {
     }
 
     get_accuracy() {
-        return (this.num_tp + this.num_tn) / (this.num_fp + this.num_fn + this.num_tp + this.num_tn);
+        return safe_ratio(this.num_tp + this.num_tn, this.num_fp + this.num_fn + this.num_tp + this.num_tn);
     }
 
     get_recall() {
-        return this.num_tp / (this.num_tp + this.num_fn);
+        return safe_ratio(this.num_tp, this.num_tp + this.num_fn);
     }
 
     get_precision() {
-        return this.num_tp / (this.num_tp + this.num_fp);
+        return safe_ratio(this.num_tp, this.num_tp + this.num_fp);
     }
 
     get_f1() {
-        return Math.sqrt(this.get_recall() * this.get_precision());
+        const r = this.get_recall();
+        const p = this.get_precision();
+        return safe_ratio(2 * p * r, p + r);
     }
 }
 

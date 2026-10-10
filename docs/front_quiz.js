@@ -17,9 +17,21 @@ class FrontQuiz {
         this.radio_tn.addEventListener("change", this.check_answer.bind(this));
         this.num_correct = 0;
         this.num_total = 0;
+        this.answered = false;
+    }
+
+    set_radios_disabled(disabled) {
+        for (const radio of [this.radio_tp, this.radio_fp, this.radio_fn, this.radio_tn]) {
+            radio.disabled = disabled;
+        }
     }
 
     check_answer(event) {
+         if (this.answered) {
+             return;
+         }
+         this.answered = true;
+         this.set_radios_disabled(true);
          this.num_total++;
          if (event.target.id === this.answer){
              this.num_correct++;
@@ -43,6 +55,8 @@ class FrontQuiz {
         this.radio_fp.checked = false;
         this.radio_fn.checked = false;
         this.radio_tn.checked = false;
+        this.answered = false;
+        this.set_radios_disabled(false);
         this.next_btn.classList.remove("correct-color");
         this.next_btn.classList.remove("wrong-color");
         this.next_btn.classList.add("neutral-color");

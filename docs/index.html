@@ -9,7 +9,10 @@
 <body>
 
 <div id="container-watch" class="main-container">
-    <a href="https://www.mdpi.com/1999-4893/19/10/849" class="long-story"> Long story (article)</a>
+    <h1>Can you classify it like ClavIA?</h1>
+    <p class="intro">ClavIA grades a multi-object tracker by labelling every association it makes as
+        TP, FP, FN or TN. Press <b>Next</b> to see random cases and how ClavIA labels them,
+        then take the quiz and classify them yourself.</p>
     <div class="main-grid">
         <div>
             <h2>Input</h2>
@@ -27,6 +30,19 @@
             <div title="Binary class of the association outcome."><span id="outcome">TP</span></div>
         </div>
     </div>
+    <details class="legend">
+        <summary>What do these terms mean?</summary>
+        <dl>
+            <dt>annotation ID</dt>
+            <dd>The detection that created the track: a real object (0, 1, &hellip;) or <i>clutter</i> (a false detection).</dd>
+            <dt>update ID</dt>
+            <dd>The detection the tracker associated with the track in this step, or <i>unmatched</i> if none.</dd>
+            <dt>supply</dt>
+            <dd><i>yes</i> if the object that created the track is among the current detections, <i>no</i> if it is missing.</dd>
+            <dt>TP / FP / FN / TN</dt>
+            <dd>True positive / false positive / false negative / true negative.</dd>
+        </dl>
+    </details>
     <div>
         <input type="button" id="next-btn" class="next-btn" value="Next"
                title="Random choice of annotation ID, update IDs and supply.">
@@ -34,7 +50,7 @@
     <div style="margin-bottom: 20px"></div>
     <div id="plain-english" class="plain-english"></div>
     <div class="main-grid hidden">
-        <div title="Number of TPs, FNs, FNs and TNs seen so far.">Confusion matrix</div>
+        <div title="Number of TPs, FPs, FNs and TNs seen so far.">Confusion matrix</div>
         <div style="margin-bottom: 15px">Ratios</div>
         <div class="form-grid">
             <div title="Number of true positives." class="tp-color"># TP</div>
@@ -52,16 +68,20 @@
             <div title="R = TP / (TP + FN)">Recall</div>
             <span id="ratios-recall">1</span>
             <div title="P = TP / (TP + FP)">Precision</div>
-            <span id="ratios-precision">0</span>
-            <div title="F1=sqrt(R P)">F1</div>
-            <span id="ratios-f1">0</span>
+            <span id="ratios-precision">1</span>
+            <div title="F1 = 2 P R / (P + R)">F1</div>
+            <span id="ratios-f1">1</span>
         </div>
     </div>
     <div style="margin-bottom: 15px"></div>
-    <input type="button" id="quiz-btn" title="Quiz mode..." value="I want a quiz..." class="next-btn quiz-btn hidden">
+    <input type="button" id="quiz-btn" title="Classify the cases yourself." value="Got it? Take the quiz" class="next-btn quiz-btn hidden">
+    <a href="https://www.mdpi.com/1999-4893/19/10/849" class="long-story">Read the full article (peer-reviewed)</a>
 </div>
 
 <div id="container-quiz" class="main-container hidden">
+    <h1>Your turn</h1>
+    <p class="intro">Pick the class you think ClavIA assigns to this case. The <b>Next case</b> button
+        turns green if you are right and red if not.</p>
     <div class="main-grid">
         <div>
             <h2>Input</h2>
@@ -82,12 +102,25 @@
             <label for="FP" title="False positive" class="fp-color">FP</label>
                 <input type="radio" id="FP" class="fp-color" name="quiz-answer">
             <label for="FN" title="False negative" class="fn-color">FN</label>
-                <input type="radio" id="FN" class="fp-color" name="quiz-answer">
+                <input type="radio" id="FN" class="fn-color" name="quiz-answer">
             <label for="TN" title="True negative" class="tn-color">TN</label>
                 <input type="radio" id="TN" class="tn-color" name="quiz-answer">
         </div>
         </div>
     </div>
+    <details class="legend">
+        <summary>What do these terms mean?</summary>
+        <dl>
+            <dt>annotation ID</dt>
+            <dd>The detection that created the track: a real object (0, 1, &hellip;) or <i>clutter</i> (a false detection).</dd>
+            <dt>update ID</dt>
+            <dd>The detection the tracker associated with the track in this step, or <i>unmatched</i> if none.</dd>
+            <dt>supply</dt>
+            <dd><i>yes</i> if the object that created the track is among the current detections, <i>no</i> if it is missing.</dd>
+            <dt>TP / FP / FN / TN</dt>
+            <dd>True positive / false positive / false negative / true negative.</dd>
+        </dl>
+    </details>
     <div>
         <input type="button" id="next-quiz" class="next-btn neutral-color" value="Next case" title="Next combination of IDs and supply flag.">
     </div>
@@ -95,7 +128,8 @@
         <div title="Score">Score: <span id="quiz-score">0 / 0</span></div>
     </div>
     <div style="margin-bottom: 20px"></div>
-    <input type="button" id="watch-btn" title="I want to watch..." value="I want to learn..." class="next-btn quiz-btn">
+    <input type="button" id="watch-btn" title="Back to the examples." value="Show me more examples" class="next-btn quiz-btn">
+    <a href="https://www.mdpi.com/1999-4893/19/10/849" class="long-story">Read the full article (peer-reviewed)</a>
 </div>
 
 <script type="module" src="main.js"></script>
