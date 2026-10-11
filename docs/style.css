@@ -51,12 +51,6 @@ h1 {
     margin-left: 0;
 }
 
-@media (max-width: 480px) {
-    .main-container {
-        padding: 20px 16px;
-    }
-}
-
 h2 {
     font-size: 1.4rem;
     margin-bottom: 10px;
@@ -189,4 +183,54 @@ span {
     border-radius: 5px;
     background-color: lightyellow;
     transition: background-color 0.2s, transform 0.1s;
+}
+
+@media (max-width: 480px) {
+    .main-container {
+        padding: 20px 16px;
+    }
+
+    h1 {
+        font-size: 1.4rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+        margin: 10px 0 6px;
+    }
+
+    span {
+        font-size: 1.3rem;
+    }
+
+    /* Stack the two-column blocks: Input above Output, and in the stats block
+       each heading directly above its own table. */
+    .main-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .main-grid > :nth-child(1) { order: 1; }
+    .main-grid > :nth-child(3) { order: 2; margin-bottom: 15px; }
+    .main-grid > :nth-child(2) { order: 3; }
+    .main-grid > :nth-child(4) { order: 4; }
+
+    .form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .form-grid > :nth-child(even) {
+        text-align: left;
+    }
+
+    .form-grid > label {
+        text-align: right;
+    }
+
+    input[type="radio"] {
+        width: 1.3rem;
+        height: 1.3rem;
+        margin: 0;
+        justify-self: start;
+        align-self: center;
+    }
 }
