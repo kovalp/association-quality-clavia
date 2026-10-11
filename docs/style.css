@@ -186,21 +186,54 @@ span {
 }
 
 @media (max-width: 480px) {
+    /* Larger base size: every rem-based size below scales with it. */
+    html {
+        font-size: 112.5%;
+    }
+
+    /* The card fills the screen instead of floating in a padded frame. */
+    body {
+        padding: 0;
+        align-items: stretch;
+        background-color: white;
+    }
+
     .main-container {
+        box-sizing: border-box;
         padding: 20px 16px;
+        border-radius: 0;
+        box-shadow: none;
+        max-width: none;
     }
 
     h1 {
-        font-size: 1.4rem;
+        font-size: 1.6rem;
     }
 
     h2 {
-        font-size: 1.2rem;
-        margin: 10px 0 6px;
+        font-size: 1.3rem;
+        margin: 14px 0 8px;
     }
 
     span {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
+    }
+
+    .form-grid {
+        row-gap: 8px;
+    }
+
+    .next-btn, .long-story {
+        padding: 16px;
+        font-size: 1.05rem;
+    }
+
+    .legend, .plain-english {
+        font-size: 1rem;
+    }
+
+    .legend summary {
+        padding: 6px 0;
     }
 
     /* Stack the two-column blocks: Input above Output, and in the stats block
