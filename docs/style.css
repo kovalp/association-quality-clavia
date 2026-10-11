@@ -141,13 +141,13 @@ span {
 .main-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 10px;
+    column-gap: 5px;
 }
 
 .form-grid {
     display: grid;
     grid-template-columns: max-content 0.7fr;
-    column-gap: 10px;
+    column-gap: 5px;
     row-gap: 5px;
     align-items: baseline;
 }
@@ -188,7 +188,7 @@ span {
 @media (max-width: 480px) {
     /* Larger base size: every rem-based size below scales with it. */
     html {
-        font-size: 112.5%;
+        font-size: 103.0%;
     }
 
     /* The card fills the screen instead of floating in a padded frame. */
@@ -211,12 +211,13 @@ span {
     }
 
     h2 {
-        font-size: 1.3rem;
+        font-size: clamp(1rem, 5vw, 1.3rem);
         margin: 14px 0 8px;
     }
 
+    /* Shrink with the screen so two columns fit on narrow phones. */
     span {
-        font-size: 1.5rem;
+        font-size: clamp(1.05rem, 5.5vw, 1.5rem);
     }
 
     .form-grid {
@@ -236,17 +237,6 @@ span {
         padding: 6px 0;
     }
 
-    /* Stack the two-column blocks: Input above Output, and in the stats block
-       each heading directly above its own table. */
-    .main-grid {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .main-grid > :nth-child(1) { order: 1; }
-    .main-grid > :nth-child(3) { order: 2; margin-bottom: 15px; }
-    .main-grid > :nth-child(2) { order: 3; }
-    .main-grid > :nth-child(4) { order: 4; }
-
     .form-grid {
         grid-template-columns: 1fr 1fr;
     }
@@ -257,6 +247,11 @@ span {
 
     .form-grid > label {
         text-align: right;
+    }
+
+    /* Keep labels such as "annotation ID:" on one line. */
+    .form-grid > :nth-child(odd) {
+        white-space: nowrap;
     }
 
     input[type="radio"] {
